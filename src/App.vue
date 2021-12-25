@@ -4,7 +4,12 @@
     <div class="board">
       <div class="column-wrapper">
         <h2 class="text-center">A fazer</h2>
-        <Container group-name="jobs" @drag-start="handleDragStart('toDo', $event)" @drop="handleDrop('toDo', $event)" :get-child-payload="getChildPayload">
+        <Container 
+        group-name="jobs" 
+        @drag-start="handleDragStart('toDo', $event)" 
+        @drop="handleDrop('toDo', $event)" 
+        :get-child-payload="getChildPayload"
+        :drop-placeholder="{ className: 'placeholder' }">
           <Draggable v-for="card in cards.toDo" :key="card.id">
             <Card>
               {{card.text}}
@@ -14,7 +19,12 @@
       </div>
       <div class="column-wrapper">
         <h2 class="text-center">Fazendo</h2>
-        <Container group-name="jobs" @drag-start="handleDragStart('doing', $event)" @drop="handleDrop('doing', $event)" :get-child-payload="getChildPayload">
+        <Container 
+        group-name="jobs" 
+        @drag-start="handleDragStart('doing', $event)" 
+        @drop="handleDrop('doing', $event)" 
+        :get-child-payload="getChildPayload"
+        :drop-placeholder="{ className: 'placeholder' }">
           <Draggable v-for="card in cards.doing" :key="card.id">
             <Card>
               {{card.text}}
@@ -24,7 +34,12 @@
       </div>
       <div class="column-wrapper">
         <h2 class="text-center">Feito</h2>
-        <Container group-name="jobs" @drag-start="handleDragStart('did', $event)" @drop="handleDrop('did', $event)" :get-child-payload="getChildPayload">
+        <Container 
+        group-name="jobs" 
+        @drag-start="handleDragStart('did', $event)" 
+        @drop="handleDrop('did', $event)" 
+        :get-child-payload="getChildPayload"
+        :drop-placeholder="{ className: 'placeholder' }">
           <Draggable v-for="card in cards.did" :key="card.id">
             <Card>
               {{card.text}}
@@ -119,5 +134,12 @@ export default {
     box-shadow: 0 0.1rem 0.2rem 0 rgba(33, 33, 33, 0.1);
     margin: 0.8rem;
     padding: 0.6rem;
+  }
+
+  .placeholder {
+    background: rgba(33, 33, 33, 0.08);
+    border-radius: 0.8rem;
+    transform: scaleY(0.85);
+    transform-origin: 0% 0%;
   }
 </style>
