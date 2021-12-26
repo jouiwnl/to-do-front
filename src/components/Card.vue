@@ -1,12 +1,14 @@
 <template>
     <div class="card">
-        <slot />
+        <strong>Nome: </strong><p>{{name}}</p>
+        <strong>Descrição: </strong><p>{{description}}</p>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Card'
+    name: 'Card',
+    props: ["name", "description"]
 }
 </script>
 
@@ -17,7 +19,5 @@ export default {
         border-radius: 0.4rem;
         box-shadow: 0 1px rgba(9, 30, 60, 0.25);
         margin-bottom: 0.8rem;
-        font-size: 1.6rem;
-        cursor: pointer;
     }
-</style>
+</style>    
