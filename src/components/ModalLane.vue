@@ -11,9 +11,9 @@
                     <div class="modal-body">
                         
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Nome da coluna</label>
+                            <label for="nameColumn">Nome da coluna</label>
                             <input type="text" class="form-control">
-                            <small id="emailHelp" class="form-text text-muted">Nome da colunas que receberá as tarefas</small>
+                            <small id="nameColumnHelp" class="form-text text-muted">Nome da colunas que receberá as tarefas</small>
                         </div>           
                     </div>
                     <div class="modal-footer">

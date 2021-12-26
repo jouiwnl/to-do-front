@@ -10,12 +10,12 @@
                     <div class="modal-body">
                         
                         <div class="form-group">
-                            <label for="exampleInputEmail1">O que faremos?</label>
+                            <label for="oqueFaremos">O que faremos?</label>
                             <input type="text" class="form-control">
                             <small id="oqueFaremosHelp" class="form-text text-muted">Filmes/Séries/jogos</small>
                         </div> 
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Descrição</label>
+                            <label for="descricao">Descrição</label>
                             <input type="text" class="form-control">
                             <small id="descricaoHelp" class="form-text text-muted">Horários/Datas</small>
                         </div>          
