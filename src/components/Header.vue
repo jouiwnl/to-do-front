@@ -1,24 +1,17 @@
 <template>
   <header class="header">
       <div class="header-title">
-          <h1>Laura e joão</h1>
-      </div>
-      <div class="plus-lane">
-          <i class="fa fa-plus" data-toggle="modal" data-target="#modalLane"></i>
-      </div>
-      <ModalLane />
+          <h1>Lista de afazeres</h1>
+      </div>      
   </header>
 </template>
 
 <script>
 
-import ModalLane from './ModalLane.vue'
+
 
 export default {
-    name: 'Header',
-    components: {
-        ModalLane
-    }
+    name: 'Header'
 }
 </script>
 
@@ -28,7 +21,7 @@ export default {
         justify-content: space-between;
         width: 100%;
         height: 40px;
-        background-color: var(--color-green);
+        background-color: rgba(255, 255, 255, 0);
     }
 
     .header-title h1 {
@@ -37,12 +30,5 @@ export default {
         color: white;
         font-weight: bold;
         font-size: 25px;
-    }
-
-    .plus-lane {
-        font-size: 2rem;
-        margin-right: 15px;
-        color: rgb(238, 238, 238);
-        cursor: pointer;
     }
 </style>

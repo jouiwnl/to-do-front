@@ -6,7 +6,15 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 85%;
+    background-image: url(../../assets/background.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 body {
-    font-family: "Lato", sans-serif;
+    font-family: "Charlie Sans", sans-serif;
     background: var(--color-green-light);
 }
