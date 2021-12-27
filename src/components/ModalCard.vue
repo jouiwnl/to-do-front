@@ -17,7 +17,12 @@
                             <label for="descricao">Descrição</label>
                             <input v-model="card.description" type="text" class="form-control">
                             <small id="descricaoHelp" class="form-text text-muted">Horários/Datas</small>
-                        </div>          
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Link do conteúdo</label>
+                            <input v-model="card.link" type="text" class="form-control">
+                            <small id="descricaoHelp" class="form-text text-muted">Link do vídeo/filme</small>
+                        </div>  
                     </div>
                     <div class="modal-footer">
                         <button type="button" v-on:click="salvar(card)" class="btn btn-primary" :class="{ 'disabled': card.name ? false : true }" :disabled="!card.name" data-dismiss="modal">Salvar</button>
@@ -43,11 +48,10 @@ export default {
     },
     methods: {
         salvar(card) {
-            this.card = { name: card.name, description: card.description, lane_id: this.column.id };
+            this.card = { name: card.name, description: card.description, link: card.link, lane_id: this.column.id };
 
             if (card.id) {
                 return CardService.editar(this.card, card.id).then(() => {
-                    window.location.reload();
                     console.log(this.card);
                 });
             }
