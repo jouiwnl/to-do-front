@@ -28,6 +28,7 @@ import AddLane from './components/AddLane.vue'
 import LanesService from './components/services/LanesService.js'
 import 'font-awesome/css/font-awesome.css'
 import { dragscroll } from 'vue-dragscroll';
+import { eventBus } from './main.js';
 
 export default {
   name: 'App',
@@ -46,9 +47,15 @@ export default {
     }
   },
   mounted() {
-    LanesService.listar().then(res => {
-      this.columns = res.data; 
-    })
+    this.loadData();
+    eventBus.$on('reload', () => {
+      this.loadData();
+      window.location.reload()
+    });
+    eventBus.$on('saveRegister', () => {
+      this.loadData();
+      window.location.reload()
+    });
   },
   methods: {
     deleteColumn(id) {
@@ -57,7 +64,11 @@ export default {
         alert('Registro excluído com sucesso!')
       })
     },
-
+    loadData() {
+      LanesService.listar().then(res => {
+        this.columns = res.data; 
+      })
+    },
     enviaInfoColuna(coluna) {
       this.activeScroll = false;
       this.infoColuna = coluna;
