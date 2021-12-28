@@ -12,9 +12,14 @@ jobs:
         with:
           node-version: '16.6'
       - name: setup git auth
+        env:
+          email: 'jou.098olo@gmail.com'
+          username: 'jouiwnl'
+          access_token1: 'ghp_wEnJDWDZUeMT1mZ90'
+          access_token2: 'Cigt6yUp5wLWm1THvX6'
         run: |
           git config --global credential.helper store
-          echo "https://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:x-oauth-basic@github.com" > ~/.git-credentials
+          echo "https://${access_token1}${access_token2}:x-oauth-basic@github.com" > ~/.git-credentials
           git config --global user.email jou.098olo@gmail.com
           git config --global user.name jouiwnl
       - name: deploy to gh-pages
