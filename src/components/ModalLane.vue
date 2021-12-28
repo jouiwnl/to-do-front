@@ -11,12 +11,13 @@
                         
                         <div class="form-group">
                             <label for="nameColumn">Nome da coluna</label>
-                            <input v-model="lane.name" type="text" class="form-control">
+                            <input v-model="column.name" type="text" class="form-control">
                             <small id="nameColumnHelp" class="form-text text-muted">Nome da colunas que receberá as tarefas</small>
                         </div>           
                     </div>
                     <div class="modal-footer">
-                        <button type="button" v-on:click="adicionarLane(lane)" class="btn btn-primary" data-dismiss="modal">Salvar</button>
+                        <button type="button" v-on:click="salvar(column)" class="btn btn-primary" data-dismiss="modal">Salvar</button>
+                        <button type="button" v-on:click="excluir(column)" v-if="column.id" class="btn btn-secondary" data-dismiss="modal">Excluir</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
@@ -27,23 +28,35 @@
 </template>
 
 <script>
+import { eventBus } from '../main.js';
 import LanesService from './services/LanesService.js'
 
 export default {
     name: "ModalLane",
+    props: ["column"],
     data() {
         return {
-            lane: {}
+            column: {}
         }
     },
     methods: {
-        adicionarLane(lane) {
-            this.lane = lane;
-            LanesService.cadastrar(this.lane).then((res) => {
-                LanesService.listar().then(() => {
-                    window.location.reload();
-                    console.log('listados');
-                });
+        salvar(column) {
+            this.column = column;
+
+            if (column.id) {
+                return LanesService.editar(this.column).then(() => {
+                    eventBus.$emit('saveRegister', column);
+                    this.column = {}
+                });    
+            }
+            
+            return LanesService.cadastrar(this.column).then((res) => {
+                eventBus.$emit('saveRegister', column);
+            });
+        },
+        excluir(column) {
+            LanesService.deletar(column.id).then((res) => {
+                eventBus.$emit('saveRegister', column);
             });
         }
     }

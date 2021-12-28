@@ -3,7 +3,7 @@
       <div class="addColumnButton" data-toggle="modal" data-target="#modalLane">
           + Adicionar mais uma coluna
       </div>
-      <ModalLane />
+      <ModalLane :column="{}"/>
   </div>
 </template>
 
@@ -29,6 +29,7 @@ export default {
     .addColumn:hover {
         background-color: rgba(245, 245, 245, 0.61);
         transition: all ease 0.2s;
+        border-radius: 0.3rem;
     }
 
     .addColumnButton {

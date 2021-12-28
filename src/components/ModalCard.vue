@@ -25,7 +25,7 @@
 
                         <div class="buttons-whatsapp" >
                             <div class="button-joao">
-                                <button id="buttonJoao" type="button" class="btn btn-success">
+                                <button id="buttonJoao" :class="{ 'disabled': card.name && card.description && card.link ? false : true }" :disabled="!(card.name && card.description && card.link)" type="button" class="btn btn-success">
                                     <div class="button-content">
                                         <i style="font-size:30px;" class="fa fa-whatsapp" aria-hidden="true"></i>
                                         <span v-on:click="enviaMensagem(card, $event)" id="joao" class="text-inside-button">Enviar para joão</span >
@@ -34,7 +34,7 @@
                             </div>
                             
                             <div class="button-laura">
-                                <button id="buttonLaura" type="button" class="btn btn-success">
+                                <button id="buttonLaura" :class="{ 'disabled': card.name && card.description && card.link ? false : true }" :disabled="!(card.name && card.description && card.link)" type="button" class="btn btn-success">
                                     <div class="button-content">
                                         <i style="font-size:30px;" class="fa fa-whatsapp" aria-hidden="true"></i>
                                         <span id="laura" v-on:click="enviaMensagem(card, $event)" class="text-inside-button">Enviar para laura</span >
@@ -45,8 +45,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" v-on:click="salvar(card)" class="btn btn-primary" :class="{ 'disabled': card.name ? false : true }" :disabled="!card.name" data-dismiss="modal">Salvar</button>
+                        <button type="button" v-on:click="excluir(card)" v-if="card.id" class="btn btn-secondary" data-dismiss="modal">Excluir</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" v-on:click="excluir(card)" v-if="card.id" class="btn btn-danger" data-dismiss="modal">Excluir</button>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@
       <div class="column-wrapper" v-for="column in columns" :key="column.id">
         <div class="column-header">
           <h5 id="columnTitle" class="text-center">{{column.name}}</h5>
-          <i id="deleteColumn" class="fa fa-ellipsis-h"></i>
+          <i id="infoColumn" v-on:click="enviaInfoColuna(column)" class="fa fa-info-circle" aria-hidden="true" data-toggle="modal" data-target="#modalLane"></i>
         </div>
         <div v-for="card in column.cards" :key="card.id" v-on:click="enviaInfoCard(card)" data-toggle="modal" data-target="#modalCard">
           <Card :name="card.name" />
@@ -14,6 +14,7 @@
           <i class="fa fa-plus"></i><small> Adicionar um cartão</small>
         </div>
         <ModalCard :column="infoColuna" :card="infoCard"/>
+        <ModalLane :column="infoColuna"/>
       </div>
       <AddLane />
     </div>
@@ -25,6 +26,7 @@ import Header from './components/Header.vue'
 import Card from './components/Card.vue'
 import ModalCard from './components/ModalCard.vue'
 import AddLane from './components/AddLane.vue'
+import ModalLane from './components/ModalLane.vue'
 import LanesService from './components/services/LanesService.js'
 import 'font-awesome/css/font-awesome.css'
 import { dragscroll } from 'vue-dragscroll';
@@ -36,7 +38,8 @@ export default {
     Header,
     Card,
     ModalCard,
-    AddLane
+    AddLane,
+    ModalLane
   },
   data() {
     return {
@@ -140,5 +143,14 @@ export default {
 
   #columnTitle {
     font-weight: 550;
+  }
+
+  #infoColumn {
+    cursor: pointer;
+  }
+
+  #infoColumn:hover {
+    opacity: 0.8;
+    transition: all ease 0.3s;
   }
 </style>
