@@ -7,14 +7,11 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@types/dragula": "^3.7.1",
     "axios": "^0.24.0",
-    "bulma": "^0.9.3",
     "core-js": "^3.6.5",
     "font-awesome": "^4.7.0",
     "vue": "^2.6.11",
-    "vue-dragscroll": "^3.0.1",
-    "vue-smooth-dnd": "^0.8.1"
+    "vue-dragscroll": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
