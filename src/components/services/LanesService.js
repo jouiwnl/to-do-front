@@ -4,6 +4,9 @@ export default {
     listar: () => {
         return http.get('lanes');
     },
+    listById: (id) => {
+        return http.get(`lanes/${id}`)
+    },
     cadastrar: (lane) => {
         return http.post('lanes', lane);
     },

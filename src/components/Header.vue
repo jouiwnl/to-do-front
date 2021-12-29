@@ -4,7 +4,7 @@
             <h1>Lista de afazeres</h1>
         </div> 
         <div class="spinner-wrapper">
-            <div class="reload-title" v-if="!showSpinner" v-on:click="handleClick()">
+            <div class="reload-title" v-if="!showSpinner" v-on:click="handleClick()" @dataLoad="handleClick()">
                 <h5>Reload</h5>
             </div>
             <div id="spinner" v-on:click="handleClick()" class="spinner-border text-light" v-if="showSpinner" role="status">
