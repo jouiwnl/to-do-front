@@ -18,14 +18,29 @@
                             <input v-model="card.description" type="text" class="form-control">
                             <small id="descricaoHelp" class="form-text text-muted">Horários/Datas</small>
                         </div>
-                        <div class="form-group">
-                            <label for="descricao">Link do conteúdo</label>
-                            <input v-model="card.link" type="text" class="form-control">
-                            <small id="descricaoHelp" class="form-text text-muted">Link do vídeo/filme</small>
+                        
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="form-group">
+                                    <label for="descricao">Link do conteúdo</label>
+                                    <input v-model="card.link" type="text" class="form-control">
+                                    <small id="descricaoHelp" class="form-text text-muted">Link do vídeo/filme</small>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="select-status" style="margin-bottom: 18px; text-align: center;">
+                                    <label for="select">Status</label>
+                                    <select class="custom-select" v-model="card.status">
+                                        <option value="0">Não iniciado</option>
+                                        <option value="1">Fazendo</option>
+                                        <option value="2">Feito</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="buttons-whatsapp" >
-                            <div class="button-joao">
+                        <div class="buttons-whatsapp pull-left" >
+                            <div class="button-joao" style="margin-bottom: 15px;">
                                 <button id="buttonJoao" v-on:click="enviaMensagem(card, $event)" :class="{ 'disabled': card.name && card.description && card.link ? false : true }" :disabled="!(card.name && card.description && card.link)" type="button" class="btn btn-success">
                                     <div class="button-content">
                                         <i style="font-size:30px;" class="fa fa-whatsapp" aria-hidden="true"></i>
@@ -42,17 +57,9 @@
                                     </div>
                                 </button>
                             </div>
-
-                            <div class="select-status" style="margin-bottom: 18px; text-align: center;">
-                                <label for="select">Status</label>
-                                <select class="custom-select" v-model="card.status">
-                                    <option value="0">Não iniciado</option>
-                                    <option value="1">Fazendo</option>
-                                    <option value="2">Feito</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" v-on:click="salvar(card)" class="btn btn-primary" :class="{ 'disabled': card.name ? false : true }" :disabled="!card.name" data-dismiss="modal">Salvar</button>
                         <button type="button" v-on:click="excluir(card)" v-if="card.id" class="btn btn-secondary" data-dismiss="modal">Excluir</button>
@@ -150,8 +157,9 @@ export default {
 
     .buttons-whatsapp {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-around;
     }
 
 </style>
