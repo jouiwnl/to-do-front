@@ -20,13 +20,16 @@ import { eventBus } from '../main.js';
 export default {
     name: 'Header',
     data() {
+        eventBus.$on('recordSaved', () => {
+            this.showSpinner = false;
+        });
         return {
             showSpinner: false
         }
     },
     methods: {
         handleClick() {
-            this.showSpinner = !this.showSpinner;
+            this.showSpinner = true;
             eventBus.$emit('reload', {});
         }
     }

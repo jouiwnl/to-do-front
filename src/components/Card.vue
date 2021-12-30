@@ -1,27 +1,38 @@
 <template>
-    <div class="card">
-        <span>{{name}}</span> 
+    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="margin-bottom: 6px;">
+        <div class="toast-header">
+            <div id="card-status" :class="defineClass(this.card)" />
+            <strong class="mr-auto">{{name}}</strong>
+            <small>11 mins ago</small>
+        </div>
+        <div class="toast-body" v-if="description">
+            {{description}}
+        </div>
+        <small style="margin-left: 5px;" class="text-muted" v-if="!description">Não há uma descrição nesse card.</small>
     </div>
 </template>
 
 <script>
+
 export default {
     name: 'Card',
-    props: ["name"]
+    props: ["name", "description", "card"],
+    methods: {
+        defineClass(card) {
+            if (card.status == '0') {
+                return 'status-notification-dontdid';
+            }
+
+            if (card.status == '1') {
+                return 'status-notification-ongoing';
+            }
+
+            return 'status-notification-terminated';
+        }
+    }
 }
 </script>
 
 <style scoped>
-    .card {
-        background: var(--color-white);
-        padding: 0.6rem;
-        border-radius: 0.4rem;
-        box-shadow: 0 1px rgba(9, 30, 60, 0.25);
-        margin-bottom: 0.8rem;
-        cursor: pointer;
-    }
-
-    .card:hover {
-        background-color: rgb(241, 241, 241);
-    }
+    
 </style>    

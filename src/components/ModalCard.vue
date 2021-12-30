@@ -3,8 +3,9 @@
         <form>
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalCardLabel">Adicionando evento</h5>
+                    <div class="modal-header" style="display: flex; justify-content: center; align-items: center;">
+                        <div :class="defineClass(this.card)" />
+                        <h5 class="modal-title pull-left" id="modalCardLabel">{{card.id ? 'Editando' : 'Adicionando'}} evento</h5>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -25,21 +26,30 @@
 
                         <div class="buttons-whatsapp" >
                             <div class="button-joao">
-                                <button id="buttonJoao" :class="{ 'disabled': card.name && card.description && card.link ? false : true }" :disabled="!(card.name && card.description && card.link)" type="button" class="btn btn-success">
+                                <button id="buttonJoao" v-on:click="enviaMensagem(card, $event)" :class="{ 'disabled': card.name && card.description && card.link ? false : true }" :disabled="!(card.name && card.description && card.link)" type="button" class="btn btn-success">
                                     <div class="button-content">
                                         <i style="font-size:30px;" class="fa fa-whatsapp" aria-hidden="true"></i>
-                                        <span v-on:click="enviaMensagem(card, $event)" id="joao" class="text-inside-button">Enviar para joão</span >
+                                        <span id="joao" class="text-inside-button">Enviar para joão</span >
                                     </div>
                                 </button>
                             </div>
                             
                             <div class="button-laura">
-                                <button id="buttonLaura" :class="{ 'disabled': card.name && card.description && card.link ? false : true }" :disabled="!(card.name && card.description && card.link)" type="button" class="btn btn-success">
+                                <button id="buttonLaura" v-on:click="enviaMensagem(card, $event)" :class="{ 'disabled': card.name && card.description && card.link ? false : true }" :disabled="!(card.name && card.description && card.link)" type="button" class="btn btn-success">
                                     <div class="button-content">
                                         <i style="font-size:30px;" class="fa fa-whatsapp" aria-hidden="true"></i>
-                                        <span id="laura" v-on:click="enviaMensagem(card, $event)" class="text-inside-button">Enviar para laura</span >
+                                        <span id="laura" class="text-inside-button">Enviar para laura</span >
                                     </div>
                                 </button>
+                            </div>
+
+                            <div class="select-status" style="margin-bottom: 18px; text-align: center;">
+                                <label for="select">Status</label>
+                                <select class="custom-select" v-model="card.status">
+                                    <option value="0">Não iniciado</option>
+                                    <option value="1">Fazendo</option>
+                                    <option value="2">Feito</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -68,7 +78,7 @@ export default {
     },
     methods: {
         salvar(card) {
-            this.card = { name: card.name, description: card.description, link: card.link, lane_id: this.column.id };
+            this.card = { name: card.name, description: card.description, link: card.link, status: card.status, lane_id: this.column.id };
 
             if (card.id) {
                 return CardService.editar(this.card, card.id).then(() => {
@@ -77,7 +87,6 @@ export default {
             }
             
             return CardService.cadastrar(this.card).then(() => {
-                window.location.reload();
                 eventBus.$emit('saveRegister', this.card)
             });
         },
@@ -104,6 +113,22 @@ export default {
 
                 window.open(apiUrl, '_blank');
             }
+        },
+
+        defineClass(card) {
+            if (card.status == '0') {
+                return 'status-notification-dontdid';
+            }
+
+            if (card.status == '1') {
+                return 'status-notification-ongoing';
+            }
+
+            if (card.status == '2') {
+                return 'status-notification-terminated';
+            }
+
+            return '';
         }
 
     }
@@ -120,7 +145,7 @@ export default {
     }
 
     .text-inside-button {
-        padding: 6px;
+        padding: 2px;
     }
 
     .buttons-whatsapp {

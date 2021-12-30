@@ -18,3 +18,27 @@ body {
     font-family: "Charlie Sans", sans-serif;
     background: var(--color-green-light);
 }
+
+.status-notification-terminated {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    background-color: rgb(48, 136, 59);
+    margin-right: 5px;
+}
+
+.status-notification-ongoing {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    background-color: rgb(218, 103, 37);
+    margin-right: 5px;
+}
+
+.status-notification-dontdid {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    background-color: rgb(206, 48, 48);
+    margin-right: 5px;
+}

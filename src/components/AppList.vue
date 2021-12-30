@@ -1,35 +1,40 @@
 <template>
   <div>
-    <div class="board">
-      <div class="column-wrapper" v-for="column in columns" :key="column.id">
-        <div class="column-header">
-          <h5 id="columnTitle" class="text-center">{{column.name}}</h5>
-          <i id="infoColumn" v-on:click="enviaInfoColuna(column)" class="fa fa-info-circle" aria-hidden="true" data-toggle="modal" data-target="#modalLane"></i>
-        </div>
-        <div class="column-body" 
-          @dragover="setDropZone(column, $event)" 
-          @dragleave="undoDropZone()" 
-          style="min-height: 30px;">
-          
-          <div v-for="card in column.cards" 
-          @dragend="dragEnd($event)" 
-          @dragstart="setDragCard(card, $event)" 
-          draggable="true" 
-          :key="card.id" 
-          v-on:click="enviaInfoCard(card)" 
-          data-toggle="modal" 
-          data-target="#modalCard">
-            <Card :name="card.name"/>
-          </div>
-        </div>
-        <div class="plus-card text-center" v-on:click="enviaInfoColuna(column)" data-toggle="modal" data-target="#modalCard">
-          <i class="fa fa-plus"></i><small> Adicionar um cartão</small>
-        </div>
-        <ModalCard :column="infoColuna" :card="infoCard"/>
-        <ModalLane :column="infoColuna"/>
-      </div>
-      <AddLane />
+    <div class="board" :key="componentKey" v-if="!this.showLoading">
+			<div class="entire-column-wrapper">
+				<div class="column-wrapper" v-for="column in columns" :key="column.id">
+					<div class="column-header">
+						<h5 id="columnTitle" class="text-center">{{column.name}}</h5>
+						<i id="infoColumn" v-on:click="enviaInfoColuna(column)" class="fa fa-info-circle" aria-hidden="true" data-toggle="modal" data-target="#modalLane"></i>
+					</div>
+					<div class="column-body" 	
+						@dragover="setDropZone(column, $event)"
+						@touchleave="setDropZone(column, $event)"
+						style="min-height: 30px;">
+						
+						<div v-for="card in column.cards" 
+								@dragend="dragEnd($event)" 
+								@dragstart="setDragCard(card, $event)" 
+								@touchstart="setDragCard(card, $event)"
+								@touchend="dragEnd($event)"
+								draggable="true" 
+								:key="card.id" 
+								v-on:click="enviaInfoCard(card)" 
+								data-toggle="modal" 
+								data-target="#modalCard">
+							<Card v-bind:card="card" :name="card.name" :description="card.description"/>
+						</div>
+					</div>
+					<div class="plus-card text-center" v-on:click="enviaInfoColuna(column)" data-toggle="modal" data-target="#modalCard">
+						<i class="fa fa-plus"></i><small> Adicionar um cartão</small>
+					</div>
+					<ModalCard :column="infoColuna" :card="infoCard"/>
+					<ModalLane :column="infoColuna"/>
+				</div>
+				<AddLane />
+			</div>	
     </div>
+		<Spinner v-if="this.showLoading"/>
   </div>
 </template>
 
@@ -38,6 +43,7 @@ import Card from './Card.vue'
 import ModalCard from './ModalCard.vue'
 import AddLane from './AddLane.vue'
 import ModalLane from './ModalLane.vue'
+import Spinner from './Spinner.vue'
 import LanesService from './services/LanesService.js'
 import 'font-awesome/css/font-awesome.css'
 import { dragscroll } from 'vue-dragscroll';
@@ -50,43 +56,39 @@ export default {
         Card,
         ModalCard,
         AddLane,
-        ModalLane
+        ModalLane,
+				Spinner
     },
 	created() {
     this.loadData();
   },
   data() {
-    return {
-      columns: [],
-      activeScroll: true,
-      infoColuna: {},
-      infoCard: {},
-      isInDropzone: false,
-      dragCard: {},
-      dropZone: {}
-    }
-  },
-  mounted() {
-    eventBus.$on('reload', () => {
+ 		eventBus.$on('reload', () => {
       this.loadData();
-      window.location.reload()
     });
 
     eventBus.$on('saveRegister', () => {
       this.loadData();
-      window.location.reload()
     });
+
+    return {
+      columns: [],
+			showLoading: false,
+      infoColuna: {},
+      infoCard: {},
+      dragCard: {},
+      dropZone: {},
+			componentKey: 0
+    }
   },
   methods: {
-    deleteColumn(id) {
-      LanesService.deletar(id).then(() => {
-        window.location.reload()
-        alert('Registro excluído com sucesso!')
-      })
-    },
     loadData() {
-      LanesService.listar().then(res => {
+			this.showLoading = true;
+      LanesService.listar().then((res) => {
         this.columns = res.data;
+				this.componentKey += 1;
+				eventBus.$emit('recordSaved', this.columns);
+				this.showLoading = false;
       });
     },
 
@@ -100,13 +102,11 @@ export default {
       });
     },
     enviaInfoColuna(coluna) {
-      this.activeScroll = false;
       this.infoColuna = coluna;
       this.infoCard = {};
     },
 
     enviaInfoCard(card){
-      this.activeScroll = false;
       this.infoCard = card;
     },
 
@@ -119,12 +119,7 @@ export default {
         }
       });
 
-      this.isInDropzone = true;
       this.dropZone = coluna;
-    },
-
-    undoDropZone() {
-      this.isInDropzone = false;
     },
     
     setDragCard(card,evento) {
@@ -154,6 +149,14 @@ export default {
     height: 100vh;
   }
 
+	.entire-column-wrapper {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		overflow: auto;
+		height: 100vh;
+	}
+
   .column-wrapper {
     background: var(--color-grey);
     width: 18rem;
@@ -163,6 +166,11 @@ export default {
     padding: 0.6rem;
     min-width: 18rem;
   }
+
+	.column-body {
+		-ms-touch-action: none;
+  	touch-action: none;
+	}
   
   .column-header {
     display: flex;
@@ -206,6 +214,6 @@ export default {
 
   .is-dragging {
     opacity: 0.5;
-    cursor: move;
+    cursor: grab;
   }
 </style>

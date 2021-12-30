@@ -1,0 +1,18 @@
+<template>
+    <div class="d-flex justify-content-center align-items-center" style="height: 90vh;">
+        <div class="spinner-border" 
+            role="status" 
+            style="color: white; width: 4rem; height: 4rem; align-self: center;"
+        ></div>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'Spinner'
+}
+</script>
+
+<style scoped>
+
+</style>
