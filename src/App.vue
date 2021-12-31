@@ -8,7 +8,6 @@
 <script>
 import Header from './components/Header.vue'
 import AppList from './components/AppList.vue'
-import 'jquery-ui-touch-punch';
 
 export default {
   name: 'App',
