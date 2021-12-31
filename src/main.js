@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import './styles'
 window.$ = window.jQuery = require('jquery');
+import 'jquery';
+import 'jquery-ui';
 import 'jquery-ui/ui/widgets/draggable';
 import 'jquery-ui/ui/widgets/droppable';
 import 'jquery-ui/ui/widgets/sortable';
