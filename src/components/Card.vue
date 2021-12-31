@@ -3,7 +3,6 @@
         <div class="toast-header">
             <div id="card-status" :class="defineClass(this.card)" />
             <strong class="mr-auto">{{name}}</strong>
-            <small>11 mins ago</small>
         </div>
         <div class="toast-body" v-if="description">
             {{description}}

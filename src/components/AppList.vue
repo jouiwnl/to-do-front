@@ -7,24 +7,16 @@
 						<h5 id="columnTitle" class="text-center">{{column.name}}</h5>
 						<i id="infoColumn" v-on:click="enviaInfoColuna(column)" class="fa fa-info-circle" aria-hidden="true" data-toggle="modal" data-target="#modalLane"></i>
 					</div>
-					<div class="column-body" 	
-						@dragover="setDropZone(column, $event)"
-						@touchleave="setDropZone(column, $event)"
-						style="min-height: 30px;">
-						
-						<div v-for="card in column.cards" 
-								@dragend="dragEnd($event)" 
-								@dragstart="setDragCard(card, $event)" 
-								@touchstart="setDragCard(card, $event)"
-								@touchend="dragEnd($event)"
-								draggable="true" 
+					<ColumnBody v-bind:columnId="column.id">
+						<div id="card-full" v-for="card in column.cards" 
 								:key="card.id" 
-								v-on:click="enviaInfoCard(card)" 
+								v-on:click="enviaInfoCard(card);"
+								@mouseup="setDragCard(card, column, $event);"
 								data-toggle="modal" 
 								data-target="#modalCard">
-							<Card v-bind:card="card" :name="card.name" :description="card.description"/>
+							<Card v-bind:card="card" draggable="true" :name="card.name" :description="card.description"/>
 						</div>
-					</div>
+					</ColumnBody>
 					<div class="plus-card text-center" v-on:click="enviaInfoColuna(column)" data-toggle="modal" data-target="#modalCard">
 						<i class="fa fa-plus"></i><small> Adicionar um cartão</small>
 					</div>
@@ -44,23 +36,26 @@ import ModalCard from './ModalCard.vue'
 import AddLane from './AddLane.vue'
 import ModalLane from './ModalLane.vue'
 import Spinner from './Spinner.vue'
+import ColumnBody from './ColumnBody.vue'
 import LanesService from './services/LanesService.js'
-import 'font-awesome/css/font-awesome.css'
 import { dragscroll } from 'vue-dragscroll';
 import { eventBus } from '../main.js';
 import CardService from './services/CardService'
+import 'font-awesome/css/font-awesome.css'
+import 'jquery-ui-dist/jquery-ui.js';
 
 export default {
-    name: 'AppList',
-    components: {
-        Card,
-        ModalCard,
-        AddLane,
-        ModalLane,
-				Spinner
-    },
+	name: 'AppList',
+	components: {
+			Card,
+			ModalCard,
+			AddLane,
+			ModalLane,
+			Spinner,
+			ColumnBody
+	},
 	created() {
-    this.loadData();
+		this.loadData();
   },
   data() {
  		eventBus.$on('reload', () => {
@@ -74,6 +69,7 @@ export default {
     return {
       columns: [],
 			showLoading: false,
+			cardBeingDragged: {},
       infoColuna: {},
       infoCard: {},
       dragCard: {},
@@ -89,14 +85,13 @@ export default {
 				this.componentKey += 1;
 				eventBus.$emit('recordSaved', this.columns);
 				this.showLoading = false;
-      });
+      }).then(() => {
+				$(this.init())
+			})
     },
 
-    applyDrag(card, dropZone) {
-      if (card.lane_id == dropZone.id) {
-        return;
-      }
-      var cardParaEnviar = { id: card.id, description: card.description, link: card.link, name: card.name, lane_id: dropZone.id  };
+    applyDrag(card, dropZoneId) {
+      var cardParaEnviar = { id: card.id, description: card.description, link: card.link, name: card.name, lane_id: dropZoneId  };
       return CardService.editar(cardParaEnviar, card.id).then(res => {
         eventBus.$emit('saveRegister', res.data);
       });
@@ -109,30 +104,22 @@ export default {
     enviaInfoCard(card){
       this.infoCard = card;
     },
-
-    setDropZone(coluna, evento){
-      evento.path.map(ev => {
-        if(ev.className == "column-body") {
-          const dropZone = ev;
-          var cardBeingDragged = document.querySelector('.is-dragging');
-          dropZone.appendChild(cardBeingDragged);
-        }
-      });
-
-      this.dropZone = coluna;
-    },
     
-    setDragCard(card,evento) {
-      const dragCard = evento.target;
-      dragCard.classList.add('is-dragging');
+    setDragCard(card) {
       this.dragCard = card;
     },
 
-    dragEnd(evento){
-      const dragCard = evento.target;
-      dragCard.classList.remove('is-dragging');
-      this.applyDrag(this.dragCard, this.dropZone);
-    }
+		init() {
+			$( '.column-body' ).sortable({
+				connectWith: '.column-body',
+				stack: '.column-body',
+				update: (evento, ui) => {
+					const id = $(evento.target).closest().prevObject.context.__vue__.columnId;
+
+					this.applyDrag(this.dragCard, id)
+				}
+			});
+		}
   },
   directives: {
     dragscroll
@@ -166,11 +153,6 @@ export default {
     padding: 0.6rem;
     min-width: 18rem;
   }
-
-	.column-body {
-		-ms-touch-action: none;
-  	touch-action: none;
-	}
   
   .column-header {
     display: flex;
