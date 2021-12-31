@@ -16,7 +16,7 @@ html {
 
 body {
     font-family: "Charlie Sans", sans-serif;
-    background: var(--color-green-light);
+    background: var(--black);
 }
 
 .status-notification-terminated {
