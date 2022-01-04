@@ -13,21 +13,34 @@
                             <input v-model="card.name" type="text" class="form-control">
                             <small id="oqueFaremosHelp" class="form-text text-muted">Filmes/Séries/jogos</small>
                         </div> 
-                        <div class="form-group">
-                            <label for="descricao">Descrição</label>
-                            <input v-model="card.description" type="text" class="form-control">
-                            <small id="descricaoHelp" class="form-text text-muted">Horários/Datas</small>
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="descricao">Descrição</label>
+                                    <textarea v-model="card.description" class="form-control" aria-label="With textarea"></textarea>
+                                    <small id="descricaoHelp" class="form-text text-muted">Observações e descrições</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="data">Data</label>
+                                    <input v-model="card.dtevento" type="datetime-local" class="form-control" aria-label="With textarea"/>
+                                    <small id="dataHelp" class="form-text text-muted">Horários/Datas</small>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="row">
-                            <div class="col-9">
+                            <div class="col-9" :class="{ 'col-12' : !card.id }">
                                 <div class="form-group">
                                     <label for="descricao">Link do conteúdo</label>
                                     <input v-model="card.link" type="text" class="form-control">
                                     <small id="descricaoHelp" class="form-text text-muted">Link do vídeo/filme</small>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-3" v-if="card.id">
                                 <div class="select-status" style="margin-bottom: 18px; text-align: center;">
                                     <label for="select">Status</label>
                                     <select class="custom-select" v-model="card.status">
@@ -85,7 +98,7 @@ export default {
     },
     methods: {
         salvar(card) {
-            this.card = { name: card.name, description: card.description, link: card.link, status: card.status, lane_id: this.column.id };
+            this.card = { name: card.name, description: card.description, link: card.link, status: card.status, lane_id: this.column.id, dtevento: card.dtevento };
 
             if (card.id) {
                 return CardService.editar(this.card, card.id).then(() => {

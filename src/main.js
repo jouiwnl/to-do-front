@@ -9,10 +9,17 @@ import 'jquery-ui/ui/widgets/droppable';
 import 'jquery-ui/ui/widgets/sortable';
 import 'jquery-ui-dist/jquery-ui';
 require('jquery-ui-touch-punch');
+import moment from 'moment';
 
 Vue.config.productionTip = false;
 
 export const eventBus = new Vue();
+
+Vue.filter('formatDate', (valor) => {
+  if (valor) {
+    return moment(valor).format('MM/DD/YYYY hh:mm')
+  }
+})
 
 new Vue({
   render: h => h(App),

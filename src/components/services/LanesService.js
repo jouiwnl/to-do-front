@@ -14,6 +14,6 @@ export default {
         return http.delete(`lanes/${id}`)
     },
     editar: (lane) => {
-        return http.put(`lanes/${lane.id}`)
+        return http.put(`lanes/${lane.id}`, lane)
     }
 }

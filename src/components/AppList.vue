@@ -3,27 +3,33 @@
     <div class="board" :key="componentKey" v-if="!this.showLoading">
 			<div class="entire-column-wrapper">
 				<div class="column-wrapper" v-for="column in columns" :key="column.id">
-					<div class="column-header">
-						<h5 id="columnTitle" class="text-center">{{column.name}}</h5>
-						<i id="infoColumn" v-on:click="enviaInfoColuna(column)" class="fa fa-info-circle" aria-hidden="true" data-toggle="modal" data-target="#modalLane"></i>
-					</div>
-					<ColumnBody v-bind:columnId="column.id">
-						<div id="card-full" v-for="card in column.cards" 
-								:key="card.id" 
-								v-on:click="enviaInfoCard(card);"
-								@mouseup="setDragCard(card, column, $event);"
-								data-toggle="modal" 
-								data-target="#modalCard">
-							<Card v-bind:card="card" draggable="true" :name="card.name" :description="card.description"/>
-						</div>
-					</ColumnBody>
-					<div class="plus-card text-center" v-on:click="enviaInfoColuna(column)" data-toggle="modal" data-target="#modalCard">
-						<i class="fa fa-plus"></i><small> Adicionar um cartão</small>
-					</div>
-					<ModalCard :column="infoColuna" :card="infoCard"/>
-					<ModalLane :column="infoColuna"/>
+          <div class="son-column-wrapper">
+            <div class="column-header">
+              <h5 id="columnTitle" class="text-center">{{column.name}}</h5>
+              <i id="infoColumn" v-on:click="enviaInfoColuna(column)" class="fa fa-info-circle" aria-hidden="true" data-toggle="modal" data-target="#modalLane"></i>
+            </div>
+            <ColumnBody v-bind:columnId="column.id">
+              <div id="card-full" v-for="card in column.cards" 
+                  :key="card.id" 
+                  v-on:click="enviaInfoCard(card);"
+                  @mouseup="setDragCard(card, column, $event);"
+                  data-toggle="modal" 
+                  data-target="#modalCard">
+                <Card v-bind:card="card" draggable="true" />
+              </div>
+            </ColumnBody>
+            <div class="plus-card text-center" v-on:click="enviaInfoColuna(column)" data-toggle="modal" data-target="#modalCard">
+              <i class="fa fa-plus"></i><small> Adicionar um cartão</small>
+            </div>
+          </div>
 				</div>
-				<AddLane />
+        <div class="addColumn">
+            <div v-on:click="() => { this.infoColuna = {} }" class="addColumnButton" data-toggle="modal" data-target="#modalLane">
+                + Adicionar mais uma coluna
+            </div>
+        </div>
+        <ModalCard :column="infoColuna" :card="infoCard"/>
+        <ModalLane :column="infoColuna"/>
 			</div>	
     </div>
 		<Spinner v-if="this.showLoading"/>
@@ -33,7 +39,6 @@
 <script>
 import Card from './Card.vue'
 import ModalCard from './ModalCard.vue'
-import AddLane from './AddLane.vue'
 import ModalLane from './ModalLane.vue'
 import Spinner from './Spinner.vue'
 import ColumnBody from './ColumnBody.vue'
@@ -49,7 +54,6 @@ export default {
 	components: {
 			Card,
 			ModalCard,
-			AddLane,
 			ModalLane,
 			Spinner,
 			ColumnBody
@@ -74,7 +78,7 @@ export default {
       infoCard: {},
       dragCard: {},
       dropZone: {},
-			componentKey: 0
+			componentKey: 0,
     }
   },
   methods: {
@@ -91,8 +95,13 @@ export default {
     },
 
     applyDrag(card, dropZoneId) {
+      if (card.lane_id === dropZoneId) {
+        return;
+      }
+
       var cardParaEnviar = { id: card.id, description: card.description, link: card.link, name: card.name, lane_id: dropZoneId  };
       return CardService.editar(cardParaEnviar, card.id).then(res => {
+        
         eventBus.$emit('saveRegister', res.data);
       });
     },
@@ -114,9 +123,9 @@ export default {
 				connectWith: '.column-body',
 				stack: '.column-body',
 				update: (evento, ui) => {
+          console.log(ui);
 					const id = $(evento.target).closest().prevObject.context.__vue__.columnId;
-
-					this.applyDrag(this.dragCard, id)
+          this.applyDrag(this.dragCard, id)
 				}
 			});
 		}
@@ -198,4 +207,23 @@ export default {
     opacity: 0.5;
     cursor: grab;
   }
+
+  .addColumn {
+        margin: 0.8rem;
+        cursor: pointer;
+        min-width: 15rem;
+    }
+
+    .addColumn:hover {
+        background-color: rgba(245, 245, 245, 0.61);
+        transition: all ease 0.2s;
+        border-radius: 0.3rem;
+    }
+
+    .addColumnButton {
+        background-color: rgba(236, 236, 236, 0.61);
+        padding: 0.7rem;
+        border-radius: 0.3rem;
+        transition: all ease 0.2s;
+    }
 </style>

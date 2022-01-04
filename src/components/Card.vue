@@ -2,12 +2,12 @@
     <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="margin-bottom: 6px;">
         <div class="toast-header">
             <div id="card-status" :class="defineClass(this.card)" />
-            <strong class="mr-auto">{{name}}</strong>
+            <strong class="mr-auto">{{card.name}}</strong>
         </div>
-        <div class="toast-body" v-if="description">
-            {{description}}
+        <div class="toast-body" v-if="card.dtevento">
+            {{card.dtevento | formatDate}}
         </div>
-        <small style="margin-left: 5px;" class="text-muted" v-if="!description">Não há uma descrição nesse card.</small>
+        <small style="margin-left: 5px;" class="text-muted" v-if="!card.dtevento">Não foi definida uma data para esse evento.</small>
     </div>
 </template>
 
@@ -15,7 +15,7 @@
 
 export default {
     name: 'Card',
-    props: ["name", "description", "card"],
+    props: ["card"],
     methods: {
         defineClass(card) {
             if (card.status == '0') {

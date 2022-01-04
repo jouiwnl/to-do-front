@@ -8,7 +8,6 @@
                         <h5 class="modal-title" id="modalLaneLabel">Adicionando coluna</h5>
                     </div>
                     <div class="modal-body">
-                        
                         <div class="form-group">
                             <label for="nameColumn">Nome da coluna</label>
                             <input v-model="column.name" type="text" class="form-control">
@@ -46,7 +45,6 @@ export default {
             if (column.id) {
                 return LanesService.editar(this.column).then(() => {
                     eventBus.$emit('saveRegister', column);
-                    this.column = {}
                 });    
             }
             
