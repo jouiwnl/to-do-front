@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const http = axios.create({
-    baseURL: 'https://todo-api-joao.herokuapp.com/'
+    baseURL: 'ec2-18-230-113-105.sa-east-1.compute.amazonaws.com:3335/'
     //baseURL: 'http://localhost:3335/'
 });
