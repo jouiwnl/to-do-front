@@ -10,7 +10,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="oqueFaremos">O que faremos?</label>
-                            <input v-model="card.name" type="text" class="form-control">
+                            <input :class="{ 'disabled': card.dtconclusao ? true : false }" :disabled="card.dtconclusao" v-model="card.name" type="text" class="form-control">
                             <small id="oqueFaremosHelp" class="form-text text-muted">Filmes/Séries/jogos</small>
                         </div> 
 
@@ -18,7 +18,7 @@
                             <div class="col-sm">
                                 <div class="form-group">
                                     <label for="descricao">Descrição</label>
-                                    <textarea v-model="card.description" class="form-control" aria-label="With textarea"></textarea>
+                                    <textarea :class="{ 'disabled': card.dtconclusao ? true : false }" :disabled="card.dtconclusao" v-model="card.description" class="form-control" aria-label="With textarea"></textarea>
                                     <small id="descricaoHelp" class="form-text text-muted">Observações e descrições</small>
                                 </div>
                             </div>
@@ -26,7 +26,7 @@
                             <div class="col-sm">
                                 <div class="form-group">
                                     <label for="data">Data</label>
-                                    <input v-model="card.dtevento" type="datetime-local" class="form-control" aria-label="With textarea"/>
+                                    <input :class="{ 'disabled': card.dtconclusao ? true : false }" :disabled="card.dtconclusao" v-model="card.dtevento" type="datetime-local" class="form-control" aria-label="With textarea"/>
                                     <small id="dataHelp" class="form-text text-muted">Horários/Datas</small>
                                 </div>
                             </div>
@@ -36,14 +36,14 @@
                             <div class="col-9" :class="{ 'col-12' : !card.id }">
                                 <div class="form-group">
                                     <label for="descricao">Link do conteúdo</label>
-                                    <input v-model="card.link" type="text" class="form-control">
+                                    <input :class="{ 'disabled': card.dtconclusao ? true : false }" :disabled="card.dtconclusao" v-model="card.link" type="text" class="form-control">
                                     <small id="descricaoHelp" class="form-text text-muted">Link do vídeo/filme</small>
                                 </div>
                             </div>
                             <div class="col-3" v-if="card.id">
                                 <div class="select-status" style="margin-bottom: 18px; text-align: center;">
                                     <label for="select">Status</label>
-                                    <select class="custom-select" v-model="card.status">
+                                    <select :class="{ 'disabled': card.dtconclusao ? true : false }" :disabled="card.dtconclusao" class="custom-select" v-model="card.status">
                                         <option value="0">Não iniciado</option>
                                         <option value="1">Fazendo</option>
                                         <option value="2">Feito</option>
@@ -86,7 +86,8 @@
 
 <script>
 import CardService from './services/CardService.js';
-import { eventBus } from '../main.js'
+import { eventBus } from '../main.js';
+import moment from 'moment';
 
 export default {
     name: "ModalCard",
@@ -101,6 +102,9 @@ export default {
             this.card = { name: card.name, description: card.description, link: card.link, status: card.status, lane_id: this.column.id, dtevento: card.dtevento };
 
             if (card.id) {
+                if (this.card.status == "2") {
+                    this.card.dtconclusao = moment().format();
+                }
                 return CardService.editar(this.card, card.id).then(() => {
                     eventBus.$emit('saveRegister', this.card)
                 });

@@ -17,7 +17,7 @@ export const eventBus = new Vue();
 
 Vue.filter('formatDate', (valor) => {
   if (valor) {
-    return moment(valor).format('MM/DD/YYYY HH:mm')
+    return moment(valor).format('DD/MM/YYYY HH:mm')
   }
 })
 

@@ -4,10 +4,11 @@
             <div id="card-status" :class="defineClass(this.card)" />
             <strong class="mr-auto">{{card.name}}</strong>
         </div>
-        <div class="toast-body" v-if="card.dtevento">
+        <div class="toast-body" v-if="!card.dtconclusao">
             {{card.dtevento | formatDate}}
         </div>
         <small style="margin-left: 5px;" class="text-muted" v-if="!card.dtevento">Não foi definida uma data para esse evento.</small>
+        <small style="margin-left: 5px;" class="text-muted" v-if="card.dtconclusao">Concluído em <strong>{{ card.dtconclusao | formatDate }}</strong></small>
     </div>
 </template>
 
