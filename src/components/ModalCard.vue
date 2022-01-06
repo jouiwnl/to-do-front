@@ -119,7 +119,7 @@ export default {
         },
 
         enviaMensagem(card, evento) {
-            var message = `Faremos/Veremos: ${card.name}, Quando: ${card.description}, Link: ${card.link}`; //card.name + card.description + card.link;
+            var message = `Faremos/Veremos: ${card.name}, Quando: ${card.dtevento | formatDate}, Link: ${card.link}, Observações: ${card.description}`; //card.name + card.description + card.link;
             if(evento.target.innerHTML.toLowerCase().match("joão")) {
                 const telefone = '5548991758280';
                 const apiUrl = `https://api.whatsapp.com/send?phone=${telefone}&text=${message}`;
