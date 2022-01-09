@@ -8,7 +8,8 @@
             {{card.dtevento | formatDate}}
         </div>
         <small style="margin-left: 5px;" class="text-muted" v-if="!card.dtevento">Não foi definida uma data para esse evento.</small>
-        <small style="margin-left: 5px;" class="text-muted" v-if="card.dtconclusao">Concluído em <strong>{{ card.dtconclusao | formatDate }}</strong></small>
+        <small style="margin-left: 5px;" class="text-muted" v-if="card.dtconclusao && card.status != '3'">Concluído em <strong>{{ card.dtconclusao | formatDate }}</strong></small>
+        <small style="margin-left: 5px;" class="text-muted" v-if="card.dtconclusao && card.status == '3'">Dropado em <strong>{{ card.dtconclusao | formatDate }}</strong></small>
     </div>
 </template>
 
@@ -25,6 +26,10 @@ export default {
 
             if (card.status == '1') {
                 return 'status-notification-ongoing';
+            }
+
+            if (card.status == '3') {
+                return 'status-notification-gived';
             }
 
             return 'status-notification-terminated';

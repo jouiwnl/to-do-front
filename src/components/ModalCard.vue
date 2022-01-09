@@ -47,6 +47,7 @@
                                         <option value="0">Não iniciado</option>
                                         <option value="1">Fazendo</option>
                                         <option value="2">Feito</option>
+                                        <option value="3">Dropado</option>
                                     </select>
                                 </div>
                             </div>
@@ -102,7 +103,7 @@ export default {
             this.card = { name: card.name, description: card.description, link: card.link, status: card.status, lane_id: this.column.id, dtevento: card.dtevento };
 
             if (card.id) {
-                if (this.card.status == "2") {
+                if (this.card.status == "2" || this.card.status == "3") {
                     this.card.dtconclusao = moment().format();
                 }
                 return CardService.editar(this.card, card.id).then(() => {
@@ -151,6 +152,10 @@ export default {
 
             if (card.status == '2') {
                 return 'status-notification-terminated';
+            }
+
+            if (card.status == '3') {
+                return 'status-notification-gived';
             }
 
             return '';
